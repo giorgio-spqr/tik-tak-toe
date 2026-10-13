@@ -27,17 +27,12 @@ const WIN_POSITIONS = [
 ];
 
 // read boards from INPUT array or from stdin
-$inputBoards = extractInputBoards(INPUT);
-//$inputBoards = manualInput();
+//$inputBoards = extractInputBoards(INPUT);
+$inputBoards = manualInput();
 
 // generate all reachable states
 $reachableStates = [];
-generateReachableStates(
-    board: '.........',
-    player: 'X',
-    lines: WIN_POSITIONS,
-    states: $reachableStates,
-);
+generateReachableStates('.........', 'X', WIN_POSITIONS, $reachableStates);
 
 // our position is reachable state?
 foreach ($inputBoards as $board) {
@@ -127,7 +122,7 @@ function generateReachableStates(string $board, string $player, array $lines, ar
 
     $states[$board] = true;
 
-    if (hasWinner($board, $lines) || !str_contains($board, '.')) {
+    if (hasWinner($board, $lines) || strpos($board, '.') === false) {
         return;
     }
 
@@ -139,11 +134,6 @@ function generateReachableStates(string $board, string $player, array $lines, ar
         $nextBoard = $board;
         $nextBoard[$i] = $player;
 
-        generateReachableStates(
-            board: $nextBoard,
-            player: $player === 'X' ? 'O' : 'X',
-            lines: $lines,
-            states: $states,
-        );
+        generateReachableStates($nextBoard, $player === 'X' ? 'O' : 'X', $lines, $states);
     }
 }
